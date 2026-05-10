@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: 222 28% 9%;
+  --paper: 42 28% 97%;
+  --muted: 224 11% 43%;
+  --line: 220 15% 83%;
+  --accent: 151 90% 42%;
+  --royal: 248 75% 58%;
+  --gold: 45 96% 55%;
+}
+
+.dark {
+  --ink: 42 35% 95%;
+  --paper: 228 24% 5%;
+  --muted: 220 10% 70%;
+  --line: 225 18% 18%;
+  --accent: 151 93% 53%;
+  --royal: 263 91% 66%;
+  --gold: 48 100% 62%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  color: hsl(var(--ink));
+  background:
+    radial-gradient(1100px 600px at 8% -10%, hsl(var(--royal) / .16), transparent 60%),
+    radial-gradient(900px 500px at 92% 0%, hsl(var(--accent) / .13), transparent 55%),
+    hsl(var(--paper));
+  font-feature-settings: "ss01", "cv01", "cv11";
+  transition: background-color .35s ease, color .35s ease;
+}
+
+body::selection {
+  background: hsl(var(--accent) / .35);
+}
+
+.dark body {
+  background:
+    radial-gradient(1100px 600px at 14% -10%, hsl(var(--royal) / .28), transparent 60%),
+    radial-gradient(900px 560px at 92% 0%, hsl(var(--accent) / .18), transparent 55%),
+    linear-gradient(180deg, hsl(228 32% 6%), hsl(var(--paper)) 36%);
+}
+
+.section-shell {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+.cinematic-panel {
+  background:
+    linear-gradient(135deg, hsl(var(--paper) / .92), hsl(var(--paper) / .68)),
+    linear-gradient(90deg, hsl(var(--accent) / .08), hsl(var(--royal) / .08));
+  border: 1px solid hsl(var(--line) / .78);
+  box-shadow: 0 24px 90px hsl(220 30% 4% / .12);
+}
+
+.dark .cinematic-panel {
+  background:
+    linear-gradient(135deg, hsl(228 24% 8% / .92), hsl(228 28% 6% / .76)),
+    linear-gradient(90deg, hsl(var(--accent) / .11), hsl(var(--royal) / .15));
+  box-shadow: 0 24px 90px hsl(220 30% 2% / .4);
+}
+
+.premium-card {
+  @apply rounded-lg border border-line/70 bg-paper/75 shadow-soft backdrop-blur-xl transition duration-300;
+}
+
+.premium-card:hover {
+  transform: translateY(-4px);
+  border-color: hsl(var(--accent) / .48);
+  box-shadow: 0 26px 80px hsl(var(--accent) / .13);
+}
+
+.image-treatment {
+  filter: saturate(1.04) contrast(1.04);
+}
+
+.dark .image-treatment {
+  filter: saturate(1.12) contrast(1.08) brightness(.86);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: hsl(var(--line) / .36);
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, hsl(var(--paper) / .58), transparent);
+  animation: shimmer 1.65s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
