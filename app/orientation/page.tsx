@@ -4,7 +4,7 @@ import { InlineNextAction, OrientationAccess, SectionHeader, SkeletonStrip } fro
 export default function OrientationPage() {
   return (
     <PageTransition>
-      <section className="pt-32">
+      <section className="pt-28">
         <div className="section-shell">
           <SectionHeader
             eyebrow="Private orientation"

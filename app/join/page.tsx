@@ -5,7 +5,7 @@ import { InlineNextAction, SectionHeader } from "@/components/sections";
 export default function JoinPage() {
   return (
     <PageTransition>
-      <section className="pt-32">
+      <section className="pt-28">
         <div className="section-shell">
           <SectionHeader
             eyebrow="Join"

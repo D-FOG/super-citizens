@@ -5,7 +5,7 @@ import { InlineNextAction, SectionHeader } from "@/components/sections";
 export default function StartClusterPage() {
   return (
     <PageTransition>
-      <section className="pt-32">
+      <section className="pt-28">
         <div className="section-shell">
           <SectionHeader
             eyebrow="Start a Cluster"
@@ -17,7 +17,7 @@ export default function StartClusterPage() {
               <h2 className="text-2xl font-black">Requirements</h2>
               <div className="mt-5 grid gap-3 text-sm text-muted">
                 {["Stable spiritual discipline", "Teachable leadership posture", "Meeting capacity", "Reporting commitment", "Training readiness"].map((item) => (
-                  <p key={item} className="rounded-md border border-line/70 p-3 font-semibold">{item}</p>
+                  <p key={item} className="rounded-sm border border-line/60 bg-paper/25 p-3 font-semibold">{item}</p>
                 ))}
               </div>
             </div>

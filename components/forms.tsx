@@ -81,15 +81,15 @@ export function ClusterApplicationForm() {
   return (
     <form onSubmit={onSubmit} className="premium-card p-6">
       <div className="mb-7">
-        <p className="text-xs font-black uppercase tracking-[.18em] text-accent">Cluster application</p>
-        <h2 className="mt-3 text-3xl font-black">Start a Cluster</h2>
+        <p className="eyebrow">Cluster application</p>
+        <h2 className="editorial-heading mt-3 text-3xl">Start a Cluster</h2>
         <div className="mt-5 grid grid-cols-3 gap-2">
           {steps.map((label, index) => (
             <button
               key={label}
               type="button"
               onClick={() => setStep(index)}
-              className={cn("h-2 rounded-full bg-line transition", index <= step && "bg-accent")}
+              className={cn("h-px bg-line transition", index <= step && "bg-accent")}
               aria-label={label}
             />
           ))}
@@ -115,7 +115,7 @@ export function ClusterApplicationForm() {
       {status === "success" ? <SuccessMessage text="Application received. Admin review, orientation access, checklist, and launch approval are next." /> : null}
       <div className="mt-6 flex gap-3">
         {step > 0 ? (
-          <button type="button" className="rounded-md border border-line/70 px-5 py-3 text-sm font-bold" onClick={() => setStep((value) => value - 1)}>
+          <button type="button" className="rounded-sm border border-line/60 bg-paper/30 px-5 py-3 text-sm font-bold" onClick={() => setStep((value) => value - 1)}>
             Back
           </button>
         ) : null}
@@ -192,7 +192,7 @@ function SmartForm({
 }) {
   return (
     <form onSubmit={onSubmit} className="premium-card p-6">
-      <h2 className="text-3xl font-black">{title}</h2>
+      <h2 className="editorial-heading text-3xl">{title}</h2>
       <div className="mt-6 grid gap-4">{children}</div>
       {error ? <p className="mt-4 text-sm font-semibold text-red-500">{error}</p> : null}
       <Button type="submit" className="mt-6 w-full">
@@ -204,13 +204,13 @@ function SmartForm({
 
 function Field({ name, label, type = "text", required }: { name: string; label: string; type?: string; required?: boolean }) {
   return (
-    <label className="grid gap-2 text-sm font-bold">
+    <label className="grid gap-2 text-sm font-bold text-muted">
       {label}
       <input
         name={name}
         type={type}
         required={required}
-        className="min-h-12 rounded-md border border-line/80 bg-paper/70 px-4 text-ink outline-none transition focus:border-accent"
+        className="min-h-12 rounded-sm border border-line/60 bg-paper/30 px-4 text-ink outline-none backdrop-blur-xl transition focus:border-accent"
       />
     </label>
   );
@@ -218,13 +218,13 @@ function Field({ name, label, type = "text", required }: { name: string; label: 
 
 function TextArea({ name, label, required }: { name: string; label: string; required?: boolean }) {
   return (
-    <label className="grid gap-2 text-sm font-bold">
+    <label className="grid gap-2 text-sm font-bold text-muted">
       {label}
       <textarea
         name={name}
         required={required}
         rows={4}
-        className="rounded-md border border-line/80 bg-paper/70 px-4 py-3 text-ink outline-none transition focus:border-accent"
+        className="rounded-sm border border-line/60 bg-paper/30 px-4 py-3 text-ink outline-none backdrop-blur-xl transition focus:border-accent"
       />
     </label>
   );
@@ -232,9 +232,9 @@ function TextArea({ name, label, required }: { name: string; label: string; requ
 
 function Select({ name, label, options }: { name: string; label: string; options: string[] }) {
   return (
-    <label className="grid gap-2 text-sm font-bold">
+    <label className="grid gap-2 text-sm font-bold text-muted">
       {label}
-      <select name={name} className="min-h-12 rounded-md border border-line/80 bg-paper/70 px-4 text-ink outline-none transition focus:border-accent">
+      <select name={name} className="min-h-12 rounded-sm border border-line/60 bg-paper/30 px-4 text-ink outline-none backdrop-blur-xl transition focus:border-accent">
         {options.map((option) => (
           <option key={option}>{option}</option>
         ))}
@@ -245,7 +245,7 @@ function Select({ name, label, options }: { name: string; label: string; options
 
 function SuccessMessage({ text }: { text: string }) {
   return (
-    <div className="mt-4 flex items-start gap-3 rounded-md border border-accent/40 bg-accent/10 p-4 text-sm font-semibold">
+    <div className="mt-4 flex items-start gap-3 rounded-sm border border-accent/30 bg-accent/10 p-4 text-sm font-semibold">
       <CheckCircle2 className="h-5 w-5 text-accent" />
       <span>{text}</span>
     </div>

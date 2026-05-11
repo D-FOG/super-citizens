@@ -5,10 +5,10 @@ import { ThemeToggle } from "@/components/theme-toggle";
 
 export function Footer() {
   return (
-    <footer className="border-t border-line/70 py-12">
+    <footer className="border-t border-line/60 py-12">
       <div className="section-shell grid gap-10 lg:grid-cols-[1.2fr_1fr_.8fr]">
         <div>
-          <h2 className="text-2xl font-black">Supersite Citizens</h2>
+          <h2 className="editorial-heading text-2xl">Supersite Citizens</h2>
           <p className="mt-2 max-w-sm text-sm font-semibold text-muted">Your Result Shows It.</p>
           <p className="mt-6 max-w-md text-sm text-muted">Raising people. Building systems. Expanding the Kingdom.</p>
         </div>
@@ -23,7 +23,7 @@ export function Footer() {
           <ThemeToggle />
           <div className="flex gap-3">
             {[Facebook, Instagram, Youtube].map((Icon, index) => (
-              <a key={index} href="#" className="grid h-10 w-10 place-items-center rounded-md border border-line/70" aria-label="Social link">
+              <a key={index} href="#" className="grid h-9 w-9 place-items-center rounded-sm border border-line/60 bg-paper/25 transition hover:border-accent/50" aria-label="Social link">
                 <Icon className="h-4 w-4" />
               </a>
             ))}

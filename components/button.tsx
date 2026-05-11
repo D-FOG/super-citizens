@@ -12,10 +12,10 @@ type ButtonProps = {
 
 export function Button({ href, children, variant = "primary", type = "button", className }: ButtonProps) {
   const classes = cn(
-    "group inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-5 py-3 text-sm font-bold transition duration-300 focus:outline-none focus:ring-2 focus:ring-accent/60",
-    variant === "primary" && "bg-accent text-black shadow-glow hover:brightness-110",
-    variant === "secondary" && "border border-line/80 bg-paper/55 text-ink backdrop-blur hover:border-accent/60 hover:bg-accent/10",
-    variant === "ghost" && "text-ink hover:bg-ink/5 dark:hover:bg-white/10",
+    "group inline-flex min-h-10 items-center justify-center gap-2 rounded-sm px-5 py-2.5 text-sm font-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-accent/40",
+    variant === "primary" && "border border-accent/80 bg-accent text-black shadow-none hover:bg-accent/90",
+    variant === "secondary" && "border border-line/70 bg-paper/30 text-ink backdrop-blur-xl hover:border-accent/50 hover:bg-accent/10",
+    variant === "ghost" && "text-ink hover:bg-ink/5 dark:hover:bg-white/5",
     className
   );
 

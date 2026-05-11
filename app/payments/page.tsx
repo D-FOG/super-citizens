@@ -5,7 +5,7 @@ import { InlineNextAction, PaymentsGrid, SectionHeader } from "@/components/sect
 export default function PaymentsPage() {
   return (
     <PageTransition>
-      <section className="pt-32">
+      <section className="pt-28">
         <div className="section-shell">
           <SectionHeader
             eyebrow="Payments"
