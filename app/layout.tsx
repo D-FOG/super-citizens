@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Navbar } from "@/components/navbar";
-import { Footer } from "@/components/footer";
+import { SiteShell } from "@/components/site-shell";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -16,11 +14,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body className={inter.variable}>
-        <ThemeProvider>
-          <Navbar />
+        <SiteShell>
           {children}
-          <Footer />
-        </ThemeProvider>
+        </SiteShell>
       </body>
     </html>
   );
