@@ -8,12 +8,33 @@ export async function POST(request: Request) {
     return badRequest("Name, location, and commitment are required.");
   }
 
+  const backendPayload = {
+    ...payload,
+    personalInfo: {
+      fullName: String(payload.name || payload.fullName || ""),
+      email: String(payload.email || ""),
+      phone: String(payload.phone || payload.contact || ""),
+      occupation: String(payload.occupation || ""),
+      ministryBackground: String(payload.ministryBackground || payload.trainingBackground || ""),
+      experience: String(payload.experience || payload.meetingCapacity || "")
+    },
+    background: [payload.occupation, payload.ministryBackground || payload.trainingBackground, payload.experience || payload.meetingCapacity].filter(Boolean).join(" | "),
+    location: {
+      city: String(payload.city || ""),
+      state: String(payload.state || ""),
+      country: String(payload.country || ""),
+      raw: String(payload.location || "")
+    },
+    skills: String(payload.skills || ""),
+    callingInterests: [payload.calling || payload.callingInterests, payload.commitment || payload.reason].filter(Boolean).join(" | ")
+  };
+
   if (API_BASE_URL) {
     try {
       const response = await fetch(`${API_BASE_URL}/leader-applications`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(backendPayload)
       });
       const data = await response.json().catch(() => null);
       if (response.ok) {

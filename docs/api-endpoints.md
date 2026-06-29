@@ -32,6 +32,7 @@ Pagination response:
 | Method | Route | Description | Auth | Roles |
 | --- | --- | --- | --- | --- |
 | POST | `/auth/register` | Create user account with default Cluster Member role. | Public | Public |
+| GET/POST | `/auth/seed-admin` | Create the local development Cluster Supervisor seed account. Disabled in production. | Public | Public |
 | POST | `/auth/login` | Authenticate and return access/refresh tokens. | Public | Public |
 | POST | `/auth/refresh` | Refresh access token. | Refresh token | Any |
 | POST | `/auth/logout` | Revoke refresh token. | Required | Any |
@@ -269,6 +270,7 @@ Status body: `{ "status": "Approved|Rejected", "reviewNote": "string" }`.
 | Method | Route | Description | Auth | Roles |
 | --- | --- | --- | --- | --- |
 | POST | `/leader-applications` | Public leader application submission. | Public | Public |
+| GET/POST | `/leader-applications/seed-leader` | Create the local development Cluster Leader seed account. Disabled in production. | Public | Public |
 | GET | `/leader-applications` | List applications. | Required | Cluster Supervisor |
 | GET | `/leader-applications/:id` | Get application. | Required | Applicant, Cluster Supervisor |
 | PATCH | `/leader-applications/:id/status` | Approve or reject. | Required | Cluster Supervisor |
