@@ -1,6 +1,9 @@
 import { PageTransition } from "@/components/motion";
 import { ClusterHierarchy, InlineNextAction, StoryPage, WeeklyActivities } from "@/components/sections";
 import { imageSet } from "@/lib/content";
+import { createMetadata, pageSeo } from "@/lib/seo";
+
+export const metadata = createMetadata(pageSeo.clusters);
 
 export default function ClustersPage() {
   return (

@@ -11,14 +11,18 @@ export function ThemeToggle() {
       type="button"
       onClick={toggleTheme}
       aria-label="Toggle theme"
-      className="relative inline-flex h-8 w-14 items-center rounded-sm border border-line/60 bg-paper/40 p-1 backdrop-blur-xl transition"
+      className="relative h-8 w-14 rounded-sm border border-line/60 bg-paper/40 p-1 backdrop-blur-xl transition"
     >
       <span
-        className="absolute h-6 w-6 rounded-sm bg-accent transition-transform duration-300"
+        className="absolute left-1 top-1 h-6 w-6 rounded-sm bg-accent transition-transform duration-300"
         style={{ transform: theme === "dark" ? "translateX(1.5rem)" : "translateX(0)" }}
       />
-      <Sun className="relative z-10 h-3.5 w-3.5 flex-1 text-ink" />
-      <Moon className="relative z-10 h-3.5 w-3.5 flex-1 text-black" />
+      <span className="absolute left-1 top-1 z-10 grid h-6 w-6 place-items-center">
+        <Sun className="h-3.5 w-3.5 text-ink" />
+      </span>
+      <span className="absolute right-1 top-1 z-10 grid h-6 w-6 place-items-center">
+        <Moon className="h-3.5 w-3.5 text-black" />
+      </span>
     </button>
   );
 }

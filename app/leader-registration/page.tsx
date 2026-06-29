@@ -1,4 +1,7 @@
 import { LeaderRegistrationForm } from "@/features/applications/leader-registration-form";
+import { createMetadata, pageSeo } from "@/lib/seo";
+
+export const metadata = createMetadata(pageSeo.leaderRegistration);
 
 export default function LeaderRegistrationPage() {
   return (

@@ -4,14 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArrowUpRight, PanelLeftClose, PanelLeftOpen, Shield } from "lucide-react";
 import { useState } from "react";
-import { generalNavItems, leaderNavItems, roles } from "@/constants/dashboard";
+import { generalNavItems, leaderNavItems } from "@/constants/dashboard";
 import { useDashboardStore } from "@/store/use-dashboard-store";
 import { cn } from "@/lib/utils";
 
 export function DashboardShell({ children, mode = "general" }: { children: React.ReactNode; mode?: "general" | "leader" }) {
   const pathname = usePathname();
   const role = useDashboardStore((state) => state.role);
-  const setRole = useDashboardStore((state) => state.setRole);
   const navItems = mode === "leader" ? leaderNavItems : generalNavItems;
   const [collapsed, setCollapsed] = useState(false);
 
@@ -70,13 +69,9 @@ export function DashboardShell({ children, mode = "general" }: { children: React
           <div className={cn("mt-5 hidden rounded-sm border border-line/60 bg-paper/35 p-4 backdrop-blur-xl lg:block", collapsed && "lg:hidden")}>
             <div className="flex items-center gap-2 text-xs font-black uppercase text-muted">
               <Shield className="h-4 w-4 text-accent" />
-              Role preview
+              Signed in role
             </div>
-            <select value={role} onChange={(event) => setRole(event.target.value as typeof role)} className="mt-3 min-h-11 w-full rounded-sm border border-line/60 bg-paper/60 px-3 text-sm font-bold outline-none focus:border-accent">
-              {roles.map((item) => (
-                <option key={item}>{item}</option>
-              ))}
-            </select>
+            <p className="mt-3 rounded-sm border border-line/60 bg-paper/60 px-3 py-3 text-sm font-bold text-ink">{role}</p>
           </div>
         </aside>
 

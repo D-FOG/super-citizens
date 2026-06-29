@@ -56,6 +56,7 @@ export function Navbar() {
 
         <div className="hidden items-center gap-3 xl:flex">
           <ThemeToggle />
+          <Button href="/login" variant="secondary" className="min-h-9 px-4 py-2">Sign In</Button>
           <Button href="/join" className="min-h-9 px-4 py-2">Join</Button>
         </div>
 
@@ -80,6 +81,10 @@ export function Navbar() {
           <ThemeToggle />
         </div>
         <div className="grid gap-2">
+          <div className="grid grid-cols-2 gap-2">
+            <Button href="/login" variant="secondary" className="min-h-11">Sign In</Button>
+            <Button href="/join" className="min-h-11">Join</Button>
+          </div>
           {navItems.map((item) => (
             <Link key={item.href} href={item.href} className="rounded-sm border border-line/50 bg-paper/30 px-4 py-3 text-sm font-black">
               {item.label}

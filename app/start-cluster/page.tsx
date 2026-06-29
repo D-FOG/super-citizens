@@ -1,6 +1,9 @@
 import { ClusterApplicationForm } from "@/components/forms";
 import { PageTransition } from "@/components/motion";
 import { InlineNextAction, SectionHeader } from "@/components/sections";
+import { createMetadata, pageSeo } from "@/lib/seo";
+
+export const metadata = createMetadata(pageSeo.startCluster);
 
 export default function StartClusterPage() {
   return (

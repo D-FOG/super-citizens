@@ -2,6 +2,9 @@ import { Mail, MessageCircle } from "lucide-react";
 import { ContactForm } from "@/components/forms";
 import { PageTransition } from "@/components/motion";
 import { SectionHeader } from "@/components/sections";
+import { createMetadata, pageSeo } from "@/lib/seo";
+
+export const metadata = createMetadata(pageSeo.contact);
 
 export default function ContactPage() {
   return (

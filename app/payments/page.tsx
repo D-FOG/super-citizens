@@ -1,6 +1,9 @@
 import { PaymentForm } from "@/components/forms";
 import { PageTransition } from "@/components/motion";
 import { InlineNextAction, PaymentsGrid, SectionHeader } from "@/components/sections";
+import { createMetadata, pageSeo } from "@/lib/seo";
+
+export const metadata = createMetadata(pageSeo.payments);
 
 export default function PaymentsPage() {
   return (

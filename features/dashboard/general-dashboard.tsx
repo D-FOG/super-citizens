@@ -1,10 +1,13 @@
 "use client";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Download, Search } from "lucide-react";
+import { useState } from "react";
 import { Button } from "@/components/button";
 import { DashboardHeader, DataTable, EmptyState, GlassPanel, PanelTitle, ProgressBar, SkeletonBlock } from "@/components/dashboard/dashboard-shell";
-import { certificationLevels, skillCategories } from "@/constants/dashboard";
-import { useAcademy, useCommunication, useDashboardHome, useDeployment, useMeetings, useMembers, useResources } from "@/hooks/use-dashboard-data";
+import { skillCategories } from "@/constants/dashboard";
+import { useAcademy, useCertificationLevels, useClusterCenters, useCommunication, useDashboardHome, useDeployment, useMeetings, useMembers, useResources, useSocialLinks } from "@/hooks/use-dashboard-data";
+import { checkInToMeeting, submitPartnerApplication } from "@/services/dashboard-service";
 import { useDashboardStore } from "@/store/use-dashboard-store";
 
 export type GeneralDashboardSection =
@@ -105,6 +108,9 @@ export function GeneralDashboard({ section = "home" }: { section?: GeneralDashbo
   const members = useMembers();
   const communication = useCommunication();
   const meetings = useMeetings();
+  const clusterCenters = useClusterCenters();
+  const socialLinks = useSocialLinks();
+  const certificationLevels = useCertificationLevels();
 
   const filteredMembers = (members.data || []).filter((member) => {
     const matchesSearch = [member.name, member.profession, member.trainingLevel, member.skills.join(" ")]
@@ -138,15 +144,15 @@ export function GeneralDashboard({ section = "home" }: { section?: GeneralDashbo
             filteredMembers={filteredMembers}
           />
         ) : section === "certification" ? (
-          <CertificationSection />
+          <CertificationSection certificationLevels={certificationLevels} />
         ) : section === "communication" ? (
           <CommunicationSection communication={communication} />
         ) : section === "cluster-center" ? (
-          <ClusterCenterSection />
+          <ClusterCenterSection clusterCenters={clusterCenters} />
         ) : section === "partner" ? (
           <PartnerSection />
         ) : section === "social" ? (
-          <SocialSection />
+          <SocialSection socialLinks={socialLinks} />
         ) : (
           <AttendanceSection meetings={meetings} />
         )}
@@ -234,7 +240,11 @@ function ResourcesSection({ resources }: { resources: ReturnType<typeof useResou
             item.category,
             item.type,
             item.uploadedAt,
-            <button key="download" type="button" className="inline-flex items-center gap-2 rounded-sm border border-line/60 px-3 py-2 font-black text-ink transition hover:border-accent/50"><Download className="h-4 w-4" />Download</button>
+            item.fileUrl ? (
+              <a key="download" href={item.fileUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-sm border border-line/60 px-3 py-2 font-black text-ink transition hover:border-accent/50"><Download className="h-4 w-4" />Download</a>
+            ) : (
+              <button key="download" type="button" disabled className="inline-flex items-center gap-2 rounded-sm border border-line/60 px-3 py-2 font-black text-muted opacity-60"><Download className="h-4 w-4" />Unavailable</button>
+            )
           ])}
         />
       ) : <EmptyState title="No visible resources" text="Your role does not currently have assigned files." />}
@@ -325,12 +335,14 @@ function SkillsSection({
   );
 }
 
-function CertificationSection() {
+function CertificationSection({ certificationLevels }: { certificationLevels: ReturnType<typeof useCertificationLevels> }) {
+  const levels = certificationLevels.data?.length ? certificationLevels.data : ["Kingdom Citizen", "Cluster Worker", "Cluster Leader", "Regional Leader", "Global Leader"];
+
   return (
     <GlassPanel>
       <PanelTitle eyebrow="Certification system" title="Current level and path" />
       <div className="grid gap-3">
-        {certificationLevels.map((level, index) => (
+        {levels.map((level, index) => (
           <div key={level} className="flex items-center justify-between rounded-sm border border-line/60 bg-paper/25 p-4">
             <span className="font-black">{level}</span>
             <span className="text-sm font-black text-muted">{index === 0 ? "Current" : index === 1 ? "In progress" : "Locked"}</span>
@@ -345,7 +357,8 @@ function CommunicationSection({ communication }: { communication: ReturnType<typ
   return (
     <GlassPanel>
       <PanelTitle eyebrow="Communication" title="Announcements, prayer networks, project updates" />
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-3">
+        <MiniList title="Announcements" items={communication.data?.announcements || []} />
         <MiniList title="Prayer Networks" items={communication.data?.prayer || []} />
         <MiniList title="Project Updates" items={communication.data?.updates || []} />
       </div>
@@ -353,51 +366,105 @@ function CommunicationSection({ communication }: { communication: ReturnType<typ
   );
 }
 
-function ClusterCenterSection() {
+function ClusterCenterSection({ clusterCenters }: { clusterCenters: ReturnType<typeof useClusterCenters> }) {
   return (
     <GlassPanel>
       <PanelTitle eyebrow="Cluster center" title="Assigned center and leader contact" />
-      <div className="rounded-sm border border-line/60 bg-paper/25 p-4">
-        <h3 className="text-xl font-black">Ikeja Formation Center</h3>
-        <p className="mt-2 text-sm leading-6 text-muted">Allen Avenue, Ikeja, Lagos. Closest center matching your profile location.</p>
-        <p className="mt-4 text-sm font-black text-accent">Leader contact: Pastor Daniel Okafor</p>
-      </div>
+      {clusterCenters.isLoading ? <SkeletonBlock /> : clusterCenters.data?.length ? (
+        <div className="grid gap-3">
+          {clusterCenters.data.map((center) => (
+            <div key={center.id || center.name} className="rounded-sm border border-line/60 bg-paper/25 p-4">
+              <h3 className="text-xl font-black">{center.name}</h3>
+              <p className="mt-2 text-sm leading-6 text-muted">{center.address || "No address provided."}</p>
+              <p className="mt-4 text-sm font-black text-accent">Leader contact: {center.leaderContact}</p>
+            </div>
+          ))}
+        </div>
+      ) : <EmptyState title="No cluster centers" text="No centers are currently available from the backend." />}
     </GlassPanel>
   );
 }
 
 function PartnerSection() {
+  const [form, setForm] = useState({ occupation: "", location: "", reason: "", skills: "" });
+  const mutation = useMutation({ mutationFn: submitPartnerApplication });
+
+  function updateField(field: keyof typeof form, value: string) {
+    setForm((current) => ({ ...current, [field]: value }));
+  }
+
   return (
     <GlassPanel>
       <PanelTitle eyebrow="Become a partner" title="Application snapshot" />
-      <div className="grid gap-3">
-        {["Occupation", "Location", "Reason", "Skills"].map((field) => (
-          <input key={field} placeholder={field} className="min-h-11 rounded-sm border border-line/60 bg-paper/30 px-4 text-sm font-semibold outline-none focus:border-accent" />
-        ))}
-        <Button variant="secondary">Submit Partner Request</Button>
-      </div>
+      <form
+        className="grid gap-3"
+        onSubmit={(event) => {
+          event.preventDefault();
+          mutation.mutate(form);
+        }}
+      >
+        <input value={form.occupation} onChange={(event) => updateField("occupation", event.target.value)} placeholder="Occupation" className="min-h-11 rounded-sm border border-line/60 bg-paper/30 px-4 text-sm font-semibold outline-none focus:border-accent" />
+        <input value={form.location} onChange={(event) => updateField("location", event.target.value)} placeholder="Location" className="min-h-11 rounded-sm border border-line/60 bg-paper/30 px-4 text-sm font-semibold outline-none focus:border-accent" />
+        <input value={form.reason} onChange={(event) => updateField("reason", event.target.value)} placeholder="Reason" className="min-h-11 rounded-sm border border-line/60 bg-paper/30 px-4 text-sm font-semibold outline-none focus:border-accent" />
+        <input value={form.skills} onChange={(event) => updateField("skills", event.target.value)} placeholder="Skills" className="min-h-11 rounded-sm border border-line/60 bg-paper/30 px-4 text-sm font-semibold outline-none focus:border-accent" />
+        <button type="submit" disabled={mutation.isPending} className="inline-flex min-h-10 items-center justify-center rounded-sm border border-line/70 bg-paper/30 px-5 py-2.5 text-sm font-black text-ink transition hover:border-accent/50 hover:bg-accent/10 disabled:opacity-60">
+          {mutation.isPending ? "Submitting..." : "Submit Partner Request"}
+        </button>
+        {mutation.isSuccess ? <p className="text-sm font-bold text-accent">Partner request submitted.</p> : null}
+        {mutation.isError ? <p className="text-sm font-bold text-red-500">Unable to submit. Confirm your API token and try again.</p> : null}
+      </form>
     </GlassPanel>
   );
 }
 
-function SocialSection() {
+function SocialSection({ socialLinks }: { socialLinks: ReturnType<typeof useSocialLinks> }) {
   return (
     <GlassPanel>
       <PanelTitle eyebrow="Social media" title="Pastor Joshua platforms" />
-      <div className="grid gap-3 sm:grid-cols-3">
-        {["YouTube", "Instagram", "Facebook"].map((platform) => (
-          <a key={platform} href="#" className="rounded-sm border border-line/60 bg-paper/25 p-4 font-black transition hover:border-accent/50">{platform}</a>
-        ))}
-      </div>
+      {socialLinks.isLoading ? <SkeletonBlock /> : socialLinks.data?.length ? (
+        <div className="grid gap-3 sm:grid-cols-3">
+          {socialLinks.data.map((link) => (
+            <a key={`${link.platform}-${link.url}`} href={link.url} target="_blank" rel="noreferrer" className="rounded-sm border border-line/60 bg-paper/25 p-4 font-black transition hover:border-accent/50">{link.platform}</a>
+          ))}
+        </div>
+      ) : <EmptyState title="No social links" text="No active social links are currently published." />}
     </GlassPanel>
   );
 }
 
 function AttendanceSection({ meetings }: { meetings: ReturnType<typeof useMeetings> }) {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: checkInToMeeting,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["meetings"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard-home"] });
+    }
+  });
+
   return (
     <GlassPanel>
       <PanelTitle eyebrow="Attendance" title="Check-in opens 30 minutes from meeting start" />
-      <MiniList title="Upcoming Meetings" items={(meetings.data?.upcoming || []).map((meeting) => `${meeting.title} - ${meeting.date} ${meeting.startTime}`)} />
+      <div className="rounded-sm border border-line/60 bg-paper/25 p-4">
+        <h3 className="font-black">Upcoming Meetings</h3>
+        <div className="mt-4 grid gap-2">
+          {(meetings.data?.upcoming || []).length ? meetings.data?.upcoming.map((meeting) => (
+            <div key={meeting.id || `${meeting.title}-${meeting.date}`} className="flex flex-col gap-3 rounded-sm border border-line/50 bg-paper/20 px-3 py-2 text-sm font-semibold text-muted sm:flex-row sm:items-center sm:justify-between">
+              <span>{meeting.title} - {meeting.date} {meeting.startTime}</span>
+              <button
+                type="button"
+                disabled={!meeting.id || !meeting.checkInOpen || mutation.isPending}
+                onClick={() => meeting.id && mutation.mutate(meeting.id)}
+                className="inline-flex min-h-9 items-center justify-center rounded-sm border border-line/70 px-3 py-2 text-xs font-black text-ink transition hover:border-accent/50 disabled:text-muted disabled:opacity-60"
+              >
+                {meeting.checkInOpen ? "Check in" : "Closed"}
+              </button>
+            </div>
+          )) : <p className="text-sm text-muted">No records yet.</p>}
+        </div>
+        {mutation.isSuccess ? <p className="mt-3 text-sm font-bold text-accent">Check-in recorded.</p> : null}
+        {mutation.isError ? <p className="mt-3 text-sm font-bold text-red-500">Unable to check in for this meeting.</p> : null}
+      </div>
       <div className="mt-4">
         <MiniList title="Past Attendance" items={(meetings.data?.history || []).map((item) => `${item.date} - checked in ${item.checkIn}`)} />
       </div>

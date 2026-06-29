@@ -1,6 +1,9 @@
 import { PageTransition } from "@/components/motion";
 import { InlineNextAction, StoryPage, TrainingGrid } from "@/components/sections";
 import { imageSet } from "@/lib/content";
+import { createMetadata, pageSeo } from "@/lib/seo";
+
+export const metadata = createMetadata(pageSeo.training);
 
 export default function TrainingPage() {
   return (

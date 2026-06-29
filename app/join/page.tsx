@@ -1,6 +1,9 @@
 import { JoinForm } from "@/components/forms";
 import { PageTransition } from "@/components/motion";
 import { InlineNextAction, SectionHeader } from "@/components/sections";
+import { createMetadata, pageSeo } from "@/lib/seo";
+
+export const metadata = createMetadata(pageSeo.join);
 
 export default function JoinPage() {
   return (

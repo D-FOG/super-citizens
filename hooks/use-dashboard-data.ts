@@ -3,13 +3,17 @@
 import { useQuery } from "@tanstack/react-query";
 import {
   getAcademy,
+  getCertificationLevels,
+  getClusterCenters,
   getCommunication,
+  getAssignments,
   getDashboardHome,
   getDeployment,
   getLeaderWorkspace,
   getMeetings,
   getMembers,
-  getResources
+  getResources,
+  getSocialLinks
 } from "@/services/dashboard-service";
 import type { UserRole } from "@/types/dashboard";
 
@@ -43,4 +47,20 @@ export function useMeetings() {
 
 export function useLeaderWorkspace() {
   return useQuery({ queryKey: ["leader-workspace"], queryFn: getLeaderWorkspace });
+}
+
+export function useClusterCenters() {
+  return useQuery({ queryKey: ["cluster-centers"], queryFn: getClusterCenters });
+}
+
+export function useSocialLinks() {
+  return useQuery({ queryKey: ["social-links"], queryFn: getSocialLinks });
+}
+
+export function useCertificationLevels() {
+  return useQuery({ queryKey: ["certification-levels"], queryFn: getCertificationLevels });
+}
+
+export function useAssignments() {
+  return useQuery({ queryKey: ["assignments"], queryFn: getAssignments });
 }

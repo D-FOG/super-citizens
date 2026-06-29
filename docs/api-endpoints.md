@@ -2,6 +2,8 @@
 
 Backend service: Node.js + TypeScript. This document defines the REST contract required by the Next.js frontend. All protected endpoints require `Authorization: Bearer <accessToken>` unless marked public.
 
+File storage is controlled by backend environment configuration. Use `STORAGE_PROVIDER=cloudinary` with `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, and `CLOUDINARY_API_SECRET` to store uploaded files in Cloudinary. Use `STORAGE_PROVIDER=local` for local development uploads served from `/uploads`.
+
 ## Shared Conventions
 
 Roles: `Cluster Supervisor`, `Cluster Leader`, `Cluster Member`, `Registered Partner`, `Field Evangelist`.
@@ -286,6 +288,17 @@ Response: `{ "id": "uuid", "status": "Pending", "submittedAt": "ISO date" }`.
 | DELETE | `/reports/:id` | Delete draft report. | Required | Author, Cluster Supervisor |
 
 Body: `{ "type": "Weekly|Monthly", "clusterCenterId": "uuid", "summary": "string", "metrics": {}, "challenges": "string", "needs": "string" }`.
+
+## Assignments
+
+| Method | Route | Description | Auth | Roles |
+| --- | --- | --- | --- | --- |
+| GET | `/assignments` | List assignments created by the leader, or all assignments for Cluster Supervisor. | Required | Cluster Leader, Cluster Supervisor |
+| POST | `/assignments` | Create a member or cluster assignment. | Required | Cluster Leader, Cluster Supervisor |
+| PATCH | `/assignments/:id` | Update assignment status, completion, due date, or assignee. | Required | Creator, Cluster Supervisor |
+| DELETE | `/assignments/:id` | Delete assignment. | Required | Creator, Cluster Supervisor |
+
+Body: `{ "title": "string", "description": "string", "dueDate": "ISO date", "assignedTo": "uuid", "clusterCenterId": "uuid", "status": "Open|In Progress|Complete", "completion": 0 }`.
 
 ## Leader Forums
 

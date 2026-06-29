@@ -1,5 +1,13 @@
 import { PageTransition } from "@/components/motion";
 import { InlineNextAction, OrientationAccess, SectionHeader, SkeletonStrip } from "@/components/sections";
+import { createMetadata } from "@/lib/seo";
+
+export const metadata = createMetadata({
+  title: "Leader Orientation | Supersite Citizens",
+  description: "Private onboarding content for approved Supersite cluster leaders.",
+  path: "/orientation",
+  index: false
+});
 
 export default function OrientationPage() {
   return (

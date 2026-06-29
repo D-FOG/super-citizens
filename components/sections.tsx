@@ -35,6 +35,7 @@ export function Hero() {
               <Button href="/join">Join a Cluster</Button>
               <Button href="/start-cluster" variant="secondary">Start a Cluster</Button>
               <Button href="/training" variant="secondary">Enter Training Hub</Button>
+              <Button href="/login" variant="secondary">Sign In / Sign Up</Button>
             </div>
           </div>
         </Reveal>
@@ -179,8 +180,10 @@ export function FinalCta() {
           <h2 className="editorial-heading mx-auto max-w-4xl text-4xl sm:text-6xl">
             If you are ready to grow, build, and produce results, this system is for you.
           </h2>
-          <div className="mt-8">
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Button href="/join">Get Started</Button>
+            <Button href="/login" variant="secondary">Sign In / Sign Up</Button>
+            <Button href="/leader-registration" variant="secondary">Leader Application</Button>
           </div>
         </Reveal>
       </div>

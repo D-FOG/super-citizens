@@ -24,12 +24,14 @@ export type Metric = {
 };
 
 export type ResourceItem = {
+  id?: string;
   title: string;
   category: string;
   description: string;
   type: ResourceType;
   uploadedAt: string;
   visibleTo: UserRole[];
+  fileUrl?: string;
 };
 
 export type Lesson = {
@@ -57,8 +59,29 @@ export type Announcement = {
 };
 
 export type Meeting = {
+  id?: string;
   title: string;
   date: string;
   startTime: string;
   checkInOpen: boolean;
+};
+
+export type Assignment = {
+  id: string;
+  title: string;
+  description: string;
+  due: string;
+  status: "Open" | "In Progress" | "Complete";
+  completion: number;
+};
+
+export type ReportItem = {
+  title: string;
+  status: string;
+  date: string;
+};
+
+export type ForumThread = {
+  title: string;
+  replies: number;
 };
